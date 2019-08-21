@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+  - "9"
+
+before_install:
+  - npm install -g yarn
+
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
+sudo: required
+
+services:
+  - docker
+
+install:
+  - npm install
+
+script:
+  - npm run build
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle  '
