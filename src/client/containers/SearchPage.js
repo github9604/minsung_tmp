@@ -86,7 +86,7 @@ class SearchPage extends Component {
             <Layout>
                 <Content className="searchpage">
                     <Row className="body_search">
-                    <h1 className="body_title">피드 검색</h1>
+                    <h1 className="body_title">구독 사이트 검색</h1>
                     <SearchArea handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
                     {
                         this.state.hideResult ?

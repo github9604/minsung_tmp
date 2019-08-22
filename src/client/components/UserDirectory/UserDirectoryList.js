@@ -18,23 +18,15 @@ class UserDirectoryList extends Component {
 
     render() {
         return (
-            <Row type="flex" gutter={16}>
-                {
-                    this.props.dirlists.map((result, i) => {
-                        return (
-                            <UserDirEach deleteDirectory={this.props.deleteDirectory} dir_name={result.dir_name} />
-                        )
-                    })
-                }
-                <a>
-                    <input placeholder="폴더명을 입력하세요" onChange={this.handleChange} />
-                </a>
-                <a>
-                    <Button onClick={this.handleSubmit}>
-                        <p>dir 추가</p>
-                    </Button>
-                </a>
-            </Row>
+                <div>
+                    {
+                        this.props.dirlists.map((result, i) => {
+                            return (
+                                <UserDirEach deleteDirectory={this.props.deleteDirectory} dir_name={result.dir_name} />
+                            )
+                        })
+                    }
+                    </div>
         );
     }
 }

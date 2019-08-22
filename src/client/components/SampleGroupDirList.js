@@ -19,9 +19,9 @@ class SampleGroupDirList extends Component {
             })
         }
         return (
-            <Row type="flex" gutter={16}>
+            <div>
                 {mapToComponents(this.props.data)}
-            </Row>
+            </div>
         );
     }
 }

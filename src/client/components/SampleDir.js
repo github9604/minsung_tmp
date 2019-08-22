@@ -1,10 +1,48 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button, Card, Col, Row, Avatar, Tag } from 'antd';
+import { Modal, Button, Card, Checkbox } from 'antd';
 const { Meta } = Card;
 
 class SampleDir extends Component {
+
+    state = {
+        modal_visible: false,
+        confirmLoading: false,
+        group_auth: [],
+        default_auth: []
+    }
+
+    groupChange = (checkedValues) => {
+        // console.log("value??: " + checkedValues);
+        this.setState({ group_auth: checkedValues });
+    }
+
+    showModal = () => {
+        this.setState({
+            modal_visible: true,
+        });
+    };
+
+    handleOk = () => {
+        this.setState({
+            ModalText: '권한 변경 중',
+            confirmLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({
+                modal_visible: false,
+                confirmLoading: false,
+            });
+        }, 2000);
+    };
+
+    handleCancel = () => {
+        console.log('Clicked cancel button');
+        this.setState({
+            modal_visible: false,
+        });
+    };
 
     handleRemove = () => {
         let deleteDirInput = this.props.data.dir_name;
@@ -12,21 +50,26 @@ class SampleDir extends Component {
         this.props.onRemove(deleteDirInput, index);
     }
     render() {
+        let arr = JSON.parse("[" + this.props.group_auth + "]");
         // console.log("???: " + this.props.data);
         return (
-            <Col xs={16} sm={16} md={12} lg={6} xl={6} style={{ width: 300, marginTop: 16 }}>
-                <Link exact to={`/userDirectory/${this.props.data.dir_name}`}>
-                    <Card hoverable={true} loading={false}>
-                        <Meta
-                            avatar={
-                                <Avatar src="../src/asset/img/folder.png" />
-                            }
-                            title={this.props.data.dir_name}
-                            description={this.props.data.owner_id}
-                        />
-                    </Card>
-                </Link>
-            </Col>
+            <li>
+                <a class="nav_a" >
+                    <Link exact to={`/MyDirectory/${this.props.data.dir_name}`}>
+                        {this.props.data.dir_name}
+                    </Link>
+                    <Button type="danger" onClick={this.handleRemove}> 삭제 </Button>
+                    <a onClick={this.showModal}> 권한 수정 </a>
+                    <Modal
+                        title="Directory 생성"
+                        visible={this.state.modal_visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                    >
+                         <Checkbox.Group options={this.props.options} onChange={this.groupChange} defaultValue={arr} />
+                    </Modal>
+                </a>
+            </li>
             // <a className="nav_a" >
             //     <Link exact to={`/UserDirectory/${this.props.data.dir_name}`}>{this.props.data.dir_name}</Link>
             //     {/* <Link exact to={`/UserDirectory/${this.props.data.dir_name}`}><Tag closable color="#87d068" onClose={this.handleRemove}> {this.props.data.dir_name} </Tag> </Link> */}

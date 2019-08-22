@@ -16,10 +16,12 @@ class UserDirEach extends Component {
     // }
     render() {
         return(
+            <li>
             <a class="nav_a" > 
             <Link exact to={`/MyDirectory/${this.props.dir_name}`}>{this.props.dir_name}</Link> 
             <Button color='red' onClick={this.handleDelete}> 삭제 </Button> 
             </a>
+            </li>
         );
     }
 }

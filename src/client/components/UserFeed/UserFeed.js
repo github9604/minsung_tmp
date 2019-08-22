@@ -56,8 +56,7 @@ class UserFeed extends Component {
             <VerticalTimelineElement
                 className="vertical-timeline-element--work"
                 date={ds}
-                iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-                icon={<Icon type="folder-open" />}
+                iconStyle={{ background: '#2b2d42', color: '#2b2d42' }}
             >
                 <h3 onClick={this.openWindow} className="vertical-timeline-element-title">{this.props.title} </h3>
                 <br />

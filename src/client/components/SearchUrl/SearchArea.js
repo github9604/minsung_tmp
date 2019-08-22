@@ -6,7 +6,7 @@ const { Search } = Input;
 const SearchArea = (props) => {
     return (
         <Search
-            placeholder="input search text"
+            placeholder="구독할 사이트의 url 혹은 키워드를 입력해주세요"
             enterButton="Search"
             size="large"
             onChange={props.handleChange}

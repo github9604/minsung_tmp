@@ -8,7 +8,7 @@ class MatchResultList extends Component {
         group_auth: [],
         default_auth: []
     }
-    
+
     groupChange = (checkedValues) => {
         // console.log("value??: " + checkedValues);
         this.setState({ group_auth: checkedValues });
@@ -24,16 +24,30 @@ class MatchResultList extends Component {
 
     render() {
         let arr = JSON.parse("[" + this.props.group_auth + "]");
+        // console.log(this.props.options[0]);
         return (
-            
             <div>
-                <h2> {this.props.now_dir} </h2>
-                <Checkbox.Group options={this.props.options} onChange={this.groupChange} defaultValue={arr} />
+                <div className="dir_title">
+                    <h2 className="dir_title_content"> {this.props.now_dir} </h2>
+                </div>
+                <table>
+                    <tr>
+                        {
+                            this.props.group_auth.map((element, i) => {
+                                return (
+                                    <td> #{this.props.options[element].label} </td>
+                                )
+                            })
+                        }
+                        <td> 변경 </td>
+                    </tr>
+                </table>
+                {/* <Checkbox.Group options={this.props.options} onChange={this.groupChange} defaultValue={arr} /> */}
                 <Button onClick={this.setGroup}> 변경 </Button>
                 {
                     this.props.match_results.map((result, i) => {
                         return (
-                            <MatchResult title={result.article_title} author={result.author} content={result.article_content}/>
+                            <MatchResult title={result.article_title} author={result.author} content={result.article_content} />
                             // <div>
                             //     <h2>{result.article_title}</h2>
                             //     <h3> {result.article_author} </h3>
@@ -43,7 +57,7 @@ class MatchResultList extends Component {
                         )
                     })
                 }
-            </div>
+            </div >
         )
     }
 }

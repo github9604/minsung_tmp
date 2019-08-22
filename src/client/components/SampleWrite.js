@@ -9,6 +9,7 @@ class SampleWrite extends Component {
     }
 
     handleChange = (e) => {
+        console.log(e.target.value);
         this.setState({
             insertDirinput: e.target.value
         });
@@ -42,4 +43,5 @@ SampleWrite.propTypes = {
 SampleWrite.defaultProps = {
     onPost: (insertDirinput) => {console.error("post function not defined");}
 }
+
 export default SampleWrite;

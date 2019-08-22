@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { UserFeedResultList, UserFeedList } from '../components/UserFeed';
+import { UserDirectoryList, MatchResultList, GroupList } from '../components/UserDirectory';
 import { Select } from 'react-select';
 import { Layout, Spin, Icon } from 'antd';
+import { Link } from 'react-router-dom';
 import { stringify } from 'querystring';
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -117,22 +119,53 @@ class MyFeed extends Component {
         const antIcon = <Icon type="loading" stype={{ fontSize: 50 }} spin />
         const loadingTextCSS = { display: this.state.wholeloading ? "block" : "none" };
         return (
-            <Layout>
-                <Content>
-                    <h1 className="body_title">Today's Feed</h1>
-                    <div>
-                        <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results}/>
-                        {/* <div> <UserFeedResultList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} /> </div> */}
+            // <Layout>
+            //     <Content>
+            //         <div className="sidenav">
+            //             <div className="sidenav_content">
+            //                 <ul>
+            //                     <li>
+            //                         <a > DIRECTORY 생성 </a>
+            //                     </li>
+            //                 </ul>
+            //             </div>
+            //         </div>
+            //         <h1 className="body_title">Today's Feed</h1>
+            //         <div>
+            //             <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} />
+            //             {/* <div> <UserFeedResultList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} /> </div> */}
+            //         </div>
+            //         <div
+            //             ref={loadingRef => (this.loadingRef = loadingRef)}
+            //             style={loadingCSS}
+            //         ></div>
+            //         <Spin dicidator={antIcon} />
+            //     </Content>
+            // </Layout>
+
+            <div class="d-flex" id="wrapper">
+                <div className="sidenav">
+                    <div className="sidenav_content">
+                        <ul>
+                            <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
+                            <li> <Link to="/MyDirectory"> 디렉토리 </Link> </li>
+                        </ul>
                     </div>
-                    <div
+                </div>
+                <div id="page-content-wrapper">
+                    <div class="container-fluid">
+                        <h2> 오늘의 피드 </h2>
+                        <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} />
+                        <div
                         ref={loadingRef => (this.loadingRef = loadingRef)}
                         style={loadingCSS}
                     ></div>
                     <Spin dicidator={antIcon} />
-                </Content>
-            </Layout>
-        );
-    }
-}
-
+                </div>
+            </div>
+                </div>
+                );
+            }
+        }
+        
 export default MyFeed;

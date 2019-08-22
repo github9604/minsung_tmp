@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { UserDirectoryList, MatchResultList, GroupList } from '../components/UserDirectory';
+import { SampleWrite, SampleDirList, SampleGroupDirList } from '../components';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Dropdown, Icon, Button } from 'semantic-ui-react';
+import { Modal, Dropdown, Icon, Button } from 'antd';
 import { string } from 'prop-types';
+import { dirPostRequest, dirListRequest, dirRemoveRequest, dirRemove } from '../actions/dirList';
 
 class MyDirectory extends Component {
 
@@ -12,26 +15,104 @@ class MyDirectory extends Component {
         this.state = {
             dirlist_results: [],
             match_results: [],
+            grp_dirlists: [],
             group_results: [],
+            auth_results: [],
             now_dir: '',
-            group_auth: ''
+            group_auth: '',
+            modal_visible: false,
+            auth_waiting: true
         };
+    }
+
+    showModal = () => {
+        this.setState({
+            modal_visible: true,
+        });
+    };
+
+    handleOk = () => {
+        this.setState({
+            ModalText: 'The modal will be closed after two seconds',
+            confirmLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({
+                modal_visible: false,
+                confirmLoading: false,
+            });
+        }, 2000);
+    };
+
+    handleCancel = () => {
+        console.log('Clicked cancel button');
+        this.setState({
+            modal_visible: false,
+        });
+    };
+
+    handlePost = (insertDirinput) => {
+        // const {addToast} = useToasts();
+        return this.props.dirPostRequest(insertDirinput).then(
+            () => {
+                if (this.props.postStatus.status === "SUCCESS") {
+                    this.loadNewDir().then(
+                        () => {
+                            console.log("user directory page: dir insert");
+                        }
+                    );
+                    // addToast('성공적으로 디렉토리가 추가됐습니다', {appearance: 'success'})
+                } else {
+                    switch (this.props.postStatus.error) {
+                        case 3:
+                            console.log("실패");
+                        // addToast('디렉토리 이름을 지정해주세요', {appearance: 'error'})
+                    }
+                }
+            }
+        )
+    }
+
+    handleRemove = (deleteDirInput, index) => {
+        console.log("doiing: " + index);
+        this.props.dirRemoveRequest(deleteDirInput, index).then(() => {
+            console.log("wonder: " + this.props.dirListData);
+            this.props.dirListRequest(true);
+            console.log("user directory page: remove dir");
+        });
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.dir_name !== this.props.match.params.dir_name) {
             console.log("Next: " + nextProps.match.params.dir_name);
             console.log("Now: " + this.props.match.params.dir_name);
-            this.performDirList();
-            this.performGroupList();
             this.showArticleInDir(nextProps.match.params.dir_name);
+            this.setState({ auth_waiting: true });
+            this.setDefault(nextProps.match.params.dir_name);
         }
     }
 
     componentDidMount() {
-        this.performDirList();
+        this.props.dirListRequest(true);
+        this.groupDirList();
         this.performGroupList();
-        this.showArticleInDir();
+        this.showArticleInDir(this.props.match.params.dir_name);
+        this.setDefault(this.props.match.params.dir_name);
+    }
+
+    setDefault = (now_dir_name) => {
+        axios.post('/api/dirlist/setuserdefault', { now_dir_name })
+            .then(response => {
+                // console.log(response);
+                // console.log(response.data);
+                let tmp = [];
+                for (let i = 0; i < response.data.length; i++) {
+                    tmp[i] = response.data[i].dir_auth;
+                    // tmp.push(response.data[i].dir_auth);
+                }
+                // console.log(tmp);
+                this.setState({ auth_results: tmp, auth_waiting: false });
+            })
     }
 
     performDirList = () => {
@@ -51,14 +132,29 @@ class MyDirectory extends Component {
     performGroupList = () => {
         axios.post('/api/dirlist/grouplist')
             .then(response => {
-                console.log(response);
-                console.log(response.data);
+                // console.log(response);
+                // console.log(response.data);
                 this.setState({
                     group_results: response.data
                 });
+                console.log("userdirectory page: group list");
             })
             .catch(error => {
                 console.log('Error fetching and parsing data', error);
+            })
+    }
+
+    groupDirList = () => {
+        axios.get('/api/dirlist/otherdirlist')
+            .then((response) => {
+                // console.log("working::" + response.data);
+                // console.log("response data[0]: " + response.data[0].dir_name);
+                this.setState({
+                    grp_dirlists: response.data
+                });
+            })
+            .catch(error => {
+                console.log('error fetching and parsing data in show dirlists');
             })
     }
 
@@ -100,6 +196,19 @@ class MyDirectory extends Component {
             }))
     }
 
+    loadNewDir() {
+        if (this.props.listStatus === 'WAITING') {
+            return new Promise((resolve, reject) => {
+                resolve();
+            });
+        }
+        if (this.props.dirListData.length === 0) {
+            return this.props.dirListRequest(true);
+        }
+
+        return this.props.dirListRequest(false);
+    }
+
     showArticleInDir = (now_dir_name) => {
         // console.log(sendDirName);
 
@@ -138,25 +247,65 @@ class MyDirectory extends Component {
 
     render() {
         return (
-            <div>
-                <h2> 공개 범위 설정 </h2>
-
-                <div class="ant-row-flex ant-row-flex-center" id="wrapper">
-                    <div class="ant-row-flex ant-row-flex-center" background-color="#d2d2d4">
-                        <UserDirectoryList deleteDirectory={this.deleteDirectory} insertDirlist={this.insertDirlist} dirlists={this.state.dirlist_results} />
-                        {/* <script src="../src/asset/vendor/jquery/jquery.min.js"></script>
-                        <script src="../src/asset/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> */}
-                    </div>
-                    <GroupList changeDirAuth={this.changeDirAuth} options={this.state.group_results} />
-                    <Button onClick={this.deleteDirectory} color='red'> 삭제 </Button>
-                    <div class="matchdirart">
-                        <MatchResultList match_results={this.state.match_results} now_dir={this.state.now_dir} />
+            <div class="d-flex" id="wrapper">
+                <div className="sidenav">
+                    <div className="sidenav_content">
+                        <ul>
+                            <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
+                            <li className="insertDir">
+                                <a  onClick={this.showModal}> DIRECTORY 생성 </a>
+                                <Modal
+                                    title="Directory 생성"
+                                    visible={this.state.modal_visible}
+                                    onOk={this.handleOk}
+                                    onCancel={this.handleCancel}
+                                >
+                                     <SampleWrite onPost={this.handlePost} />
+                                </Modal>
+                            </li>
+                            <SampleDirList group_auth={this.state.auth_results} changeDirAuth={this.changeDirAuth} options={this.state.group_results} data={this.props.dirListData} onRemove={this.handleRemove} />
+                            <SampleGroupDirList group_auth={this.state.auth_results} changeDirAuth={this.changeDirAuth} options={this.state.group_results} data={this.state.grp_dirlists} />
+                        </ul>
                     </div>
                 </div>
-
+                <div id="page-content-wrapper">
+                    <div class="container-fluid">
+                        {
+                            this.state.auth_waiting ? null : <div className="matchdirart">
+                                <MatchResultList group_auth={this.state.auth_results} changeDirAuth={this.changeDirAuth} options={this.state.group_results} match_results={this.state.match_results} now_dir={this.state.now_dir} />
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
-export default MyDirectory;
+
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.authentication.status.isLoggedIn,
+        postStatus: state.dirList.post,
+        dirListData: state.dirList.list.data,
+        listStatus: state.dirList.list.status,
+        removeStatus: state.dirList.remove
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dirPostRequest: (insertDirinput) => {
+            return dispatch(dirPostRequest(insertDirinput));
+        },
+        dirListRequest: (isInitial) => {
+            return dispatch(dirListRequest(isInitial));
+        },
+        dirRemoveRequest: (deleteDirInput, index) => {
+            return dispatch(dirRemoveRequest(deleteDirInput, index));
+        }
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyDirectory);

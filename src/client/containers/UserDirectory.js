@@ -144,6 +144,11 @@ class UserDirectory extends Component {
         return (
             <Layout>
                 <Content>
+                    <Row>
+                    <Col span={6} pull={18}>
+                        <SampleWrite onPost={this.handlePost} />
+                    </Col>
+                    <Col span={18} push={6}>
                     <SampleWrite onPost={this.handlePost} />
                     <SampleDirList data={this.props.dirListData} onRemove={this.handleRemove} />
                     {
@@ -151,9 +156,8 @@ class UserDirectory extends Component {
                             <MatchResultList group_auth={this.state.auth_results} changeDirAuth={this.changeDirAuth} options={this.state.group_results} match_results={this.state.match_results} now_dir={this.state.now_dir} />
                         </div>
                     }
-
-
-
+                    </Col>
+                    </Row>
                 </Content>
             </Layout>
         );
