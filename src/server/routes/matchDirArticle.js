@@ -6,9 +6,9 @@ const router = express.Router();
 const cors = require("cors");
 router.use(cors());
 
-const sequelize = new Sequelize('kt_intern', 'min9604', '!zpdlxl9604', {
-    host: 'localhost',
-    port: '6002',
+const sequelize = new Sequelize('heroku_c41d79b16d69b76', 'bbd90f30305cab', '3a19c4e9', {
+    host: 'us-cdbr-iron-east-02.cleardb.net',
+    port: '3306',
     dialect: 'mysql',
     operatorsAliases: false,
     pool: {
@@ -18,6 +18,7 @@ const sequelize = new Sequelize('kt_intern', 'min9604', '!zpdlxl9604', {
         idle: 10000
     }
 });
+
 
 const TableDirectory = sequelize.define(
     'TableDirectory',

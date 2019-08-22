@@ -8,11 +8,11 @@ const session = require("express-session");
 import api from './routes';
 
 const connection  = mysql.createConnection({
-    host: 'localhost',
-    user: 'min9604',
-    password: '!zpdlxl9604',
-    database: 'kt_intern',
-    port: '6002'
+    host: 'us-cdbr-iron-east-02.cleardb.net',
+    user: 'bbd90f30305cab',
+    password: '3a19c4e9',
+    database: 'heroku_c41d79b16d69b76',
+    port: '3306'
 });
 
 // connection.connect();
