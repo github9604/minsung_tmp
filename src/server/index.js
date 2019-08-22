@@ -15,7 +15,7 @@ const connection  = mysql.createConnection({
     port: '6002'
 });
 
-connection.connect();
+// connection.connect();
 
 app.use(session({
     key: 'kt',
