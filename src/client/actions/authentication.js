@@ -15,9 +15,9 @@ import{
 export function getStatusRequest() {
     return (dispatch) => {
         dispatch(getStatus());
-        return axios.get('/api/memberLogin/getInfo')
+        return axios.get('/api/memberLogin/getinfo')
         .then((response) => {
-            dispatch(getStatusSuccess(response.data.info.user_id));
+            dispatch(getStatusSuccess(response.data));
         }).catch((error) => {
             dispatch(getStatusFailure());
         });

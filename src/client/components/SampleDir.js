@@ -54,7 +54,7 @@ class SampleDir extends Component {
         // console.log("???: " + this.props.data);
         return (
             <li>
-                <a class="nav_a" >
+                <a className="nav_a" >
                     <Link exact to={`/MyDirectory/${this.props.data.dir_name}`}>
                         {this.props.data.dir_name}
                     </Link>

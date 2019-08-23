@@ -32,6 +32,7 @@ class App extends Component {
     }
 
     componentDidMount() {
+
         function getCookie(name) {
             var value = "; " + document.cookie;
             var parts = value.split("; " + name + "=");
@@ -40,13 +41,12 @@ class App extends Component {
 
         // get loginData from cookie
         let loginData = getCookie('key');
-
         // if loginData is undefined, do nothing
         if (typeof loginData === "undefined") return;
 
         // decode base64 & parse json
         loginData = JSON.parse(atob(loginData));
-
+        console.log("로그인 여부" + loginData);
         // if not logged in, do nothing
         if (!loginData.isLoggedIn) return;
 
@@ -54,12 +54,14 @@ class App extends Component {
         // check whether this cookie is valid or not
         this.props.getStatusRequest().then(
             () => {
+                console.log(this.props.status.valid);
                 // if session is not valid
                 if (!this.props.status.valid) {
                     // logout the session
                     loginData = {
                         isLoggedIn: false,
-                        username: ''
+                        user_id: '',
+                        group_id: ''
                     };
 
                     document.cookie = 'key=' + btoa(JSON.stringify(loginData));

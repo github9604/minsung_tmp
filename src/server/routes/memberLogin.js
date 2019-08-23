@@ -49,12 +49,15 @@ router.post('/logout', (req, res) => {
 
 router.get('/getinfo', (req, res) => {
     if(typeof req.session.user_id === "undefined"){
+        console.log("cannot find login info");
         return res.status(401).json({
             error: "THERE IS NO LOGIN DATA",
             code: 1
         });
+    } else{
+        console.log("now" + req.session.user_id);
+        return res.json(req.session.user_id);
     }
-    res.json({info: req.session.user_id});
 });
 
 router.post('/signin', (req, res) => {
@@ -79,9 +82,9 @@ router.post('/signin', (req, res) => {
                 let hour = 3600000;
                 req.session.user_id = req.body.user_id;
                 req.session.group_id = memberLogin.group_id;
-                res.cookie("group_id", memberLogin.group_id,{
-                    expires: new Date(Date.now() + hour)
-                });
+                // res.cookie("group_id", memberLogin.group_id,{
+                //     expires: new Date(Date.now() + hour)
+                // });
                 return res.json({
                     success: true
                 });

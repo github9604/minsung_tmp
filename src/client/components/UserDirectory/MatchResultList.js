@@ -30,20 +30,19 @@ class MatchResultList extends Component {
                 <div className="dir_title">
                     <h2 className="dir_title_content"> {this.props.now_dir} </h2>
                 </div>
-                <table>
-                    <tr>
+                <table cellpadding="20px">
+                    <tr className="dir_auth_content">
                         {
                             this.props.group_auth.map((element, i) => {
                                 return (
-                                    <td> #{this.props.options[element].label} </td>
+                                    <td className="dir_auth_content_td"> #{this.props.options[element].label} </td>
                                 )
                             })
                         }
-                        <td> 변경 </td>
+                        <td className="dir_auth_content_td" onClick={this.setGroup}> 권한변경 </td>
                     </tr>
                 </table>
                 {/* <Checkbox.Group options={this.props.options} onChange={this.groupChange} defaultValue={arr} /> */}
-                <Button onClick={this.setGroup}> 변경 </Button>
                 {
                     this.props.match_results.map((result, i) => {
                         return (

@@ -247,7 +247,7 @@ class MyDirectory extends Component {
 
     render() {
         return (
-            <div class="d-flex" id="wrapper">
+            <div className="d-flex" id="wrapper">
                 <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
@@ -269,7 +269,7 @@ class MyDirectory extends Component {
                     </div>
                 </div>
                 <div id="page-content-wrapper">
-                    <div class="container-fluid">
+                    <div className="container-fluid">
                         {
                             this.state.auth_waiting ? null : <div className="matchdirart">
                                 <MatchResultList group_auth={this.state.auth_results} changeDirAuth={this.changeDirAuth} options={this.state.group_results} match_results={this.state.match_results} now_dir={this.state.now_dir} />

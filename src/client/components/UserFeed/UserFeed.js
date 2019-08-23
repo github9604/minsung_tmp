@@ -7,7 +7,6 @@ import "antd/dist/antd.css";
 
 class UserFeed extends Component {
 
-    
   state = {
     visible: false,
     selectdir: '',

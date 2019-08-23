@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { UserFeedResultList, UserFeedList } from '../components/UserFeed';
+import { UserFeedResultList, UserFeedList, NoFeed } from '../components/UserFeed';
 import { UserDirectoryList, MatchResultList, GroupList } from '../components/UserDirectory';
 import { Select } from 'react-select';
-import { Layout, Spin, Icon } from 'antd';
+import { Layout, Spin, Icon, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { stringify } from 'querystring';
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 
 class MyFeed extends Component {
 
@@ -19,13 +18,14 @@ class MyFeed extends Component {
             totalResults: 0,
             page: 0,
             prevY: 0,
-            wholeloading: false
+            wholeloading: true,
+            hasFeed: true
         };
     }
 
     componentDidMount() {
         this.showTodayFeed(this.state.page);
-        this.showDirLists();
+        // this.showDirLists();
         let options = {
             root: null,
             rootMargin: "0px",
@@ -55,13 +55,12 @@ class MyFeed extends Component {
         axios.post('/api/showtodayfeed', { page, results })
             .then((response) => {
                 console.log("my feed page: showtodayfeed");
-                // console.log("response: " + response);
-                // console.log("response data: " + response.data);
-                this.setState({
-                    results: response.data,
-                    wholeloading: false
-                });
-                console.log(response.data);
+                if (response.data.success) {
+                    this.setState({ hasFeed: true, results: response.data.data, wholeloading: false });
+                }
+                else {
+                    this.setState({ hasFeed: false, wholeloading:false });
+                }
             })
             .catch(error => {
                 console.log('Error fetching and parsing data', error);
@@ -112,38 +111,16 @@ class MyFeed extends Component {
     }
 
     render() {
+        const antIcon = <Icon type="loading" stype={{ fontSize: 50 }} spin />
+        const loadingTextCSS = { display: this.state.wholeloading ? "block" : "none" };
         const loadingCSS = {
             height: "100px",
             margin: "30px"
         };
-        const antIcon = <Icon type="loading" stype={{ fontSize: 50 }} spin />
-        const loadingTextCSS = { display: this.state.wholeloading ? "block" : "none" };
-        return (
-            // <Layout>
-            //     <Content>
-            //         <div className="sidenav">
-            //             <div className="sidenav_content">
-            //                 <ul>
-            //                     <li>
-            //                         <a > DIRECTORY 생성 </a>
-            //                     </li>
-            //                 </ul>
-            //             </div>
-            //         </div>
-            //         <h1 className="body_title">Today's Feed</h1>
-            //         <div>
-            //             <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} />
-            //             {/* <div> <UserFeedResultList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} /> </div> */}
-            //         </div>
-            //         <div
-            //             ref={loadingRef => (this.loadingRef = loadingRef)}
-            //             style={loadingCSS}
-            //         ></div>
-            //         <Spin dicidator={antIcon} />
-            //     </Content>
-            // </Layout>
 
-            <div class="d-flex" id="wrapper">
+        return (
+
+            <Layout>
                 <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
@@ -152,20 +129,58 @@ class MyFeed extends Component {
                         </ul>
                     </div>
                 </div>
-                <div id="page-content-wrapper">
-                    <div class="container-fluid">
-                        <h2> 오늘의 피드 </h2>
-                        <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} />
-                        <div
+                <Content>
+                    <div className="withsidetitle"> <h1 className="body_title"> 오늘의 피드 </h1> </div>
+                    <div className="container-fluid">
+                    {
+                        this.state.hasFeed ?
+                            <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} /> :
+                            <NoFeed />
+                        // <div className="nofeed"> 
+                        // <h3> 구독할 사이트를 추가하여 개인 피드를 만들어주세요 </h3> 
+                        // <Button> <Link to="/SearchPage"/> 사이트 구독 </Button>
+                        // </div>
+                    }
+                    {
+                        this.state.wholeloading ?
+                        <Spin dicidator={antIcon} /> : undefined
+                    }
+                    <div
                         ref={loadingRef => (this.loadingRef = loadingRef)}
                         style={loadingCSS}
                     ></div>
-                    <Spin dicidator={antIcon} />
                 </div>
-            </div>
-                </div>
-                );
-            }
-        }
-        
+            </Content>
+        </Layout >
+            // <div className="d-flex" id="wrapper">
+            //     <div className="sidenav">
+            //         <div className="sidenav_content">
+            //             <ul>
+            //                 <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
+            //                 <li> <Link to="/MyDirectory"> 디렉토리 </Link> </li>
+            //             </ul>
+            //         </div>
+            //     </div>
+            //     <div className="withsidetitle"> 오늘의 피드 </div>
+                // <div className="container-fluid">
+                //     {
+                //         this.state.hasFeed ?
+                //             <UserFeedList addtoDirectory={this.addtoDirectory} showTodayFeed={this.showTodayFeed} showDirLists={this.showDirLists} dirlists={this.state.dirlists} results={this.state.results} /> :
+                //             <NoFeed />
+                //         // <div className="nofeed"> 
+                //         // <h3> 구독할 사이트를 추가하여 개인 피드를 만들어주세요 </h3> 
+                //         // <Button> <Link to="/SearchPage"/> 사이트 구독 </Button>
+                //         // </div>
+                //     }
+                //     <div
+                //         ref={loadingRef => (this.loadingRef = loadingRef)}
+                //         style={loadingCSS}
+                //     ></div>
+                //     <Spin dicidator={antIcon} />
+                // </div>
+            // </div>
+        );
+    }
+}
+
 export default MyFeed;

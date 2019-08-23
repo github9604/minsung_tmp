@@ -136,7 +136,6 @@ const TableArticle = sequelize.define(
 
 
 router.post('/', function (req, res, next) {
-    console.log("wow: " + req.body.results);
     TableFeed.findAll({
         where: { feed_reader_id: req.session.user_id },
         attributes: [
@@ -145,7 +144,14 @@ router.post('/', function (req, res, next) {
         limit: 6
     })
         .then(tableFeed => {
-            let arrayOfPromises = [];
+            console.log(tableFeed.length);
+            if(tableFeed.length == 0){
+                return res.json({
+                    success: false
+                });
+            }
+            else {
+                let arrayOfPromises = [];
             tableFeed.map((result, i) => {
                 // console.log("result: " + result.post_feedid);
                 let base_url = 'http://cloud.feedly.com//v3/streams/contents?streamId=' + result.feed_id;
@@ -171,11 +177,15 @@ router.post('/', function (req, res, next) {
                         return a["published"] - b["published"];
                     });
                     // console.log(sortedvalues.slice(0, 3));
-                    res.json(sortedvalues.slice(0, req.body.page + 6));
+                    return res.json({
+                        success: true, data:sortedvalues.slice(0, req.body.page + 6)
+                    });
                     // // res.json(sortedvalues.slice(0,3));
                     // res.json(sortedvalues);
                 }
             );
+            }
+            
         })
 });
 
@@ -186,8 +196,7 @@ router.get('/', function (req, res, next) {
             'feed_id'
         ],
         limit: 6
-    })
-        .then(tableFeed => {
+    }).then(tableFeed => {
             let arrayOfPromises = [];
             tableFeed.map((result, i) => {
                 // console.log("result: " + result.post_feedid);
