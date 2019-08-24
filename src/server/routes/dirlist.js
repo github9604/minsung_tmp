@@ -287,40 +287,49 @@ router.delete('/delete', (req, res) => {
 
 router.post('/groupAuth', (req, res, next) => {
     let group_auth = req.body.group_auth;
-    TableDirectory.findOne({
-        where: { owner_id: req.session.user_id, dir_name: req.body.now_dir },
+    TableDirAuth.destroy({
+        where: {dir_id: req.body.now_dir_id}
     }).then((response) => {
-        let tmp = response.dir_id;
-        TableDirAuth.destroy({
-            where: { dir_id: response.dir_id }
-        }).then((response) => {
-            console.log(tmp);
-            console.log(group_auth);
-            group_auth.map((now, i) => {
-                TableDirAuth.create({
-                    dir_id: tmp,
-                    dir_auth: now
-                })
+        group_auth.map((now, i) => {
+            TableDirAuth.create({
+                dir_id: req.body.now_dir_id,
+                dir_auth: now
             })
-            // let inputData = [{dir_id, dir_auth}];
-            // for(let i=0; i<group_auth.length; i++){
-            //     inputData[i].dir_id = tmp;
-            //     inputData[i].dir_auth = group_auth[i];
-            // }
-            // console.log("after: " + inputData);
-            return res.send("success");
         })
+        return res.json({success: true});
     })
+    .catch(error => {return res.json({success: false})})
+    // TableDirectory.findOne({
+    //     where: { owner_id: req.session.user_id, dir_name: req.body.now_dir },
+    // }).then((response) => {
+    //     let tmp = response.dir_id;
+    //     TableDirAuth.destroy({
+    //         where: { dir_id: response.dir_id }
+    //     }).then((response) => {
+    //         console.log(tmp);
+    //         console.log(group_auth);
+    //         group_auth.map((now, i) => {
+    //             TableDirAuth.create({
+    //                 dir_id: tmp,
+    //                 dir_auth: now
+    //             })
+    //         })
+    //         // let inputData = [{dir_id, dir_auth}];
+    //         // for(let i=0; i<group_auth.length; i++){
+    //         //     inputData[i].dir_id = tmp;
+    //         //     inputData[i].dir_auth = group_auth[i];
+    //         // }
+    //         // console.log("after: " + inputData);
+    //         return res.send("success");
+    //     })
+    // })
 })
 
 router.post('/setuserdefault', function (req, res, next) {
-    console.log("why notbb");
-    TableDirectory.findOne({
-        where: { owner_id: req.session.user_id, dir_name: req.body.now_dir_name }
+    TableDirAuth.findAll({
+        where: { dir_id: req.body.dir_id }
     }).then(response => {
-        TableDirAuth.findAll({
-            where: { dir_id: response.dir_id }
-        }).then((result) => res.json(result));
+       res.json(response);
     });
 })
 

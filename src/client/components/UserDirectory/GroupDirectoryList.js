@@ -9,7 +9,7 @@ class GroupDirectoryList extends Component {
                 {
                     this.props.data.map((result, i) => {
                         return (
-                            <GroupDirectoryEach dir_name={result.dir_name} />
+                            <GroupDirectoryEach dir_name={result.dir_name} owner_id={result.owner_id} dir_id={result.dir_id}/>
                         )
                     })
                 }

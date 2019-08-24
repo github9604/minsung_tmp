@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'mdbreact/dist/css/mdb.css';
 
-import {AllDirectory, SampleFeed, SideBar, Login, Register, MainPage, App, SearchPage, MyFeed, MyDirectory, UserDirectory, GroupDirectory } from '../client/containers';
+import {AllDirectory, SampleFeed, SideBar, DirInfo, Login, Register, MainPage, App, SearchPage, MyFeed, MyDirectory, UserDirectory, GroupDirectory } from '../client/containers';
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
@@ -30,6 +30,7 @@ ReactDOM.render(
       <Route exact path="/MyDirectory" component={MyDirectory} />
       <Route exact path="/GroupDirectory" component={GroupDirectory} />
       <Route path="/GroupDirectory/:dir_name" component={GroupDirectory} />
+      <Route path="/DirInfo/:dir_name" component={DirInfo} />
       {/* <Switch>
         <Route path="/MyFeed/:name" component={MyFeed} /> */}
       <Route path="/MyFeed" component={MyFeed} />

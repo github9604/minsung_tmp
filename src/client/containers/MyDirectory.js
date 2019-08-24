@@ -45,7 +45,6 @@ class MyDirectory extends Component {
     };
 
     handleCancel = () => {
-        console.log('Clicked cancel button');
         this.setState({
             modal_visible: false,
         });

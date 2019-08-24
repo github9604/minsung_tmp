@@ -12,9 +12,6 @@ class MatchResult extends Component {
                        <div dangerouslySetInnerHTML={{ __html: this.props.content }}></div>
                 </Card>
                 <br/>
-                {/* <h3> {this.props.title} </h3>
-                <h4> {this.props.author} </h4>
-                <h5> {this.props.summary} </h5> */}
             </div>
         );
     }

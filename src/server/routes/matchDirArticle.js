@@ -184,41 +184,20 @@ router.post('/mine', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    ArticleToDirectory.findAll({
-        where: {dir_owner: req.session.user_id, dir_name:req.body.now_dir}
-    })
-    .then(articleTodir => {
-        // console.log(articleTodir);
-        let arrayOfPromises = [];
-        articleTodir.map((result, i) => {
-            let base_url = 'https://cloud.feedly.com//v3/entries/' + result.post_urlid;
-            // console.log(base_url);
-            arrayOfPromises.push(
-                axios.get(base_url)
-                .then(response => response.data)
-                .catch(error => console.log(error))
-            );
-        });
 
-        Promise.all(arrayOfPromises).then(
-            function(values){
-                let tmp = [];
-                for(let i=0; i<values.length; i++){
-                    Array.prototype.push.apply(tmp, values[i]);
-                }
-                // for(let i=0; i<values.length; i++){
-                //     Array.prototype.push.apply(values[0], values[i+1]);
-                //     // console.log("values: " + values[0]);
-                // }
-                let sortedvalues = tmp;
-                // let sortedvalues = values[0];
-                // console.log(JSON.stringify(sortedvalues));
-                res.json(sortedvalues);
-            }
-        );
-        // console.log(articleTodir);
-        // console.log(JSON.stringify(articleTodir));
-        // res.json(articleTodir);
+    if (typeof req.session.user_id === 'undefined') {
+        return res.status(403).json({
+            error: "NOT LOGGED IN",
+            code: 1
+        });
+    }
+
+    TableArticle.findAll({
+        where: {dir_id: req.body.dir_id}
+    })
+    .then(result => {
+        if(result) res.json({success: true, data: result})
+        else res.json({success: false})
     })
 });
 

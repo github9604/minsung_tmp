@@ -187,7 +187,7 @@ class AllDirectory extends Component {
                                         <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 로딩중 </h4> </div>
                                         : (this.state.has_groupdir ? <GroupDirectoryList data={this.state.grp_dirlists} /> : <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 공유된 디렉토리가 없습니다 </h4> </div>)
                                     )
-                                    : ( this.state.searchGroupDir ? <SearchResult data={this.state.searchGroupDirResult}/> : <h4> 일치하는 디렉토리가 없습니다 </h4>)
+                                    : ( this.state.searchGroupDir ? <SearchResult data={this.state.searchGroupDirResult}/> : <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 일치하는 디렉토리가 없습니다 </h4> </div>)
                                    
                                 }
                         </Row>
