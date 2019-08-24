@@ -1,9 +1,8 @@
 import express from 'express';
-import axios from 'axios';
 import Sequelize from 'sequelize';
-import { async } from 'q';
 
 const router = express.Router();
+const Op = Sequelize.Op;
 const cors = require("cors");
 router.use(cors());
 
@@ -121,45 +120,35 @@ router.get('/', (req, res, next) => {
         })
 })
 
+router.post('/search', function(req, res, next) {
+    let searchdir = req.body.obj;
+    console.log(searchdir);
+    TableDirectory.findAll({
+        where: {owner_id: req.session.user_id, dir_name:searchdir}
+    })
+    .then(userdir => {
+        TableDirectory.findAll({
+            where: {owner_id: {[Op.ne]: req.session.user_id}, dir_name:searchdir}
+        }).then(groupdir => res.json({userdir: userdir, groupdir: groupdir}))
+    })
+})
 router.get('/otherdirlist', function (req, res, next) {
+
    let new_query = 'SELECT * FROM heroku_c41d79b16d69b76.tbl_directory INNER JOIN tbl_dir_auth where tbl_directory.dir_id = tbl_dir_auth.dir_id AND NOT(tbl_directory.owner_id = :now_user) AND tbl_dir_auth.dir_auth = :now_auth';
    let values = {
        now_auth: req.session.group_id,
        now_user: req.session.user_id
    };
    sequelize.query(new_query, { replacements: values, model: TableDirectory })
-   .then(result => res.send(result))
-//    sequelize.query(new_query, { replacements: values, model: TableDirectory })
-//         .then(result => {
-//             console.log("find dir_id" + result);
-//             let send_result = [];
-//             result.map((tmp, i) => {
-//                 send_result.push(TableArticle.findAll({
-//                     where: {dir_id: tmp.dir_id}
-//                 }).then(tmp => {
-//                     return tmp;
-//                 }))
-//             })
-//             return Promise.all(send_result)
-//             // result.map((tmp, i) => {
-//             //     TableArticle.findAll({
-//             //         where: {dir_id: tmp.dir_id}
-//             //     }).then((final) => console.log("after:" + final))
-//             // })
-//             // console.log("done: " + JSON.stringify(result));
-//             // console.log("working:" + result[0].dir_id);
-//         }).then(wow => res.send(wow))
+   .then(result => {
+       if(result.length == 0){
+           return res.json({success: false});
+       } else{
+           return res.send({success: true, data: result})
+       }
+   })
+   .catch((error) => console.log("error in loading shared dir list"))
 });
-    // let new_query = 'SELECT * FROM tbl_directory WHERE tbl_directory.share_group_id = :now_group AND NOT (tbl_directory.owner_id = :now_user)'
-    // let values = {
-    //     now_group: req.session.group_id,
-    //     now_user: req.session.user_id
-    // };
-    // sequelize.query(new_query, { replacements: values, model: TableDirectory })
-    //     .then(tableDirectory => {
-    //         // console.log(JSON.stringify(tableDirectory));
-    //         res.json(tableDirectory);
-    //     })
 
 router.post('/grouplist', (req, res, next) => {
     TableGroup.findAll()

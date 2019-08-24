@@ -11,5 +11,6 @@ import SampleFeed from './SampleFeed';
 import AllDirectory from './AllDirectory';
 import RepoSearch from './RepoSearch';
 import SideBar from './SideBar';
+import DirInfo from './DirInfo';
 
-export {RepoSearch, SideBar, AllDirectory, Login, Register, App, SearchPage, MyFeed, MyDirectory, MainPage, UserDirectory, GroupDirectory, SampleFeed};
+export {RepoSearch, SideBar, AllDirectory, DirInfo, Login, Register, App, SearchPage, MyFeed, MyDirectory, MainPage, UserDirectory, GroupDirectory, SampleFeed};

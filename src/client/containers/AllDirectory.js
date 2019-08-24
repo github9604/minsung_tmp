@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Layout, Row, Modal } from 'antd';
 import { SampleWrite } from '../components';
-import { SearchArea, UserDirectoryList, GroupDirectoryList } from '../components/UserDirectory'
+import { SearchArea, SearchResult, UserDirectoryList, GroupDirectoryList } from '../components/UserDirectory'
 import { dirPostRequest, dirListRequest, dirRemoveRequest, dirRemove } from '../actions/dirList';
 import 'antd/dist/antd.css';
 const { Content } = Layout;
@@ -15,12 +15,17 @@ class AllDirectory extends Component {
         super();
         this.state = {
             grp_dirlists: [],
-            now_dir: '',
-            loading_mydir: true,
             loading_groupdir: true,
+            has_groupdir: true,
             modal_visible: false,
+            confirmloading: false,
             insertDirinput: '',
-            confirmloading: false
+            searchDirinput: '',
+            searchMyDir: true,
+            searchGroupDir: true,
+            hideSearchResult: true,
+            searchResult: [],
+            searchGroupDirResult: []
         };
     }
 
@@ -32,11 +37,13 @@ class AllDirectory extends Component {
     groupDirList = () => {
         axios.get('/api/dirlist/otherdirlist')
             .then((response) => {
+                if (response.data.success) {
+                    this.setState({ grp_dirlists: response.data.data, loading_groupdir: false, has_groupdir: true })
+                } else {
+                    this.setState({ loading_groupdir: false, has_groupdir: false })
+                }
                 // console.log("working::" + response.data);
                 // console.log("response data[0]: " + response.data[0].dir_name);
-                this.setState({
-                    grp_dirlists: response.data, loading_groupdir: false
-                });
                 console.log("all directory page group directory load");
             })
             .catch(error => {
@@ -64,13 +71,41 @@ class AllDirectory extends Component {
         });
     }
 
+    handleChangeDir = (e) => {
+        console.log(e.target.value);
+        this.setState({
+            searchDirinput: e.target.value
+        });
+        if (!e.target.value) this.setState({ hideSearchResult: true });
+    }
+
+    handleSubmit = () => {
+        let obj = this.state.searchDirinput;
+        axios.post('/api/dirlist/search', { obj })
+            .then((response) => {
+                // console.log(response.data.userdir);
+                // console.log(response.data.groupdir);
+                if (response.data.userdir.length == 0) {
+                    this.setState({ searchMyDir: false });
+                } else {
+                    this.setState({ searchMyDir: true, searchResult: response.data.userdir });
+                }
+                if (response.data.groupdir.length == 0) {
+                    this.setState({ searchGroupDir: false });
+                } else {
+                    this.setState({ searchGroupDir: true, searchGroupDirResult: response.data.groupdir });
+                }
+                this.setState({ hideSearchResult: false })
+            })
+    }
+
     handlePost = () => {
         this.setState({ confirmloading: true });
         let insertDirinput = this.state.insertDirinput;
         return this.props.dirPostRequest(insertDirinput).then(
             () => {
                 if (this.props.postStatus.status === "SUCCESS") {
-                    this.setState({confirmloading:false, modal_visible:false});
+                    this.setState({ confirmloading: false, modal_visible: false });
                     this.loadNewDir().then(
                         () => {
                             console.log("user directory page: dir insert");
@@ -86,13 +121,6 @@ class AllDirectory extends Component {
                 }
             }
         )
-        // this.props.onPost(insertDirinput).then(
-        //     () => {
-        //         this.setState({
-        //             insertDirinput: ""
-        //         });
-        //     }
-        // );
     }
 
     loadNewDir() {
@@ -123,35 +151,45 @@ class AllDirectory extends Component {
                     <div className="body_search">
                         <Row className="body_search">
                             <h1 className="body_title">디렉토리</h1>
-                            <SearchArea />
+                            <SearchArea handleSubmit={this.handleSubmit} handleChangeDir={this.handleChangeDir} />
                         </Row>
                         <Row className="body_search">
                             <div className="body_subtitle"> <h3> 내 디렉토리 </h3>
-                                <div class="folderContainer">
-                                    <a onClick={this.showModal}>
-                                        <div class="folder">
-                                            <i class="fa fa-plus-circle"></i>
-                                        </div>
-                                        <h3>디렉토리 추가</h3>
-                                    </a>
-                                    <Modal
-                                        title="Directory 생성"
-                                        visible={this.state.modal_visible}
-                                        onOk={this.handlePost}
-                                        onCancel={this.handleCancel}
-                                        confirmLoading={this.state.confirmloading}
-                                    >
-                                        <SampleWrite handleChange={this.handleChange} />
-                                    </Modal>
-                                </div><UserDirectoryList data={this.props.dirListData} /></div>
+                                {
+                                    this.state.hideSearchResult ?
+                                        (<div><div className="folderContainer">
+                                            <a onClick={this.showModal}>
+                                                <div className="folder">
+                                                    <i className="fa fa-plus-circle"></i>
+                                                </div>
+                                                <h3>디렉토리 추가</h3>
+                                            </a>
+                                            <Modal
+                                                title="Directory 생성"
+                                                visible={this.state.modal_visible}
+                                                onOk={this.handlePost}
+                                                onCancel={this.handleCancel}
+                                                confirmLoading={this.state.confirmloading}
+                                            >
+                                                <SampleWrite handleChange={this.handleChange} />
+                                            </Modal>
+                                        </div><UserDirectoryList data={this.props.dirListData} /> </div>)
+                                        : (this.state.searchMyDir ? <SearchResult data={this.state.searchResult} /> : <h4> 일치하는 디렉토리가 없습니다 </h4>)
+                                }
+                            </div>
 
                         </Row>
                         <Row className="body_search">
-                            {
-                                this.state.loading_groupdir ?
-                                    <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 로딩중 </h4> </div>
-                                    : <GroupDirectoryList data={this.state.grp_dirlists} />
-                            }
+                                {
+                                    this.state.hideSearchResult ? 
+                                    (
+                                        this.state.loading_groupdir ?
+                                        <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 로딩중 </h4> </div>
+                                        : (this.state.has_groupdir ? <GroupDirectoryList data={this.state.grp_dirlists} /> : <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 공유된 디렉토리가 없습니다 </h4> </div>)
+                                    )
+                                    : ( this.state.searchGroupDir ? <SearchResult data={this.state.searchGroupDirResult}/> : <h4> 일치하는 디렉토리가 없습니다 </h4>)
+                                   
+                                }
                         </Row>
                     </div>
                 </Content>

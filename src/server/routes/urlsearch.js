@@ -54,8 +54,6 @@ const TableFeed = sequelize.define(
 router.use(cors());
 
 router.post('/', function (req, res, next) {
-    let name = req.body.obj;
-    // console.log(req.body.obj);
     // console.log(typeof(req.body.obj));
     let wow = encodeURI(req.body.obj);
     console.log(wow);

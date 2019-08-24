@@ -10,7 +10,7 @@ class SearchArea extends Component {
                 placeholder="검색할 디렉토리의 이름을 입력해주세요"
                 enterButton="Search"
                 size="large"
-                onChange={this.props.handleChange}
+                onChange={this.props.handleChangeDir}
                 onSearch={this.props.handleSubmit}
             />
         );
