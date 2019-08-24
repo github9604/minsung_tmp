@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { SearchArea, SearchResultList, OtherFeed, NoFeed} from '../components/SearchUrl';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { Layout, Row } from 'antd';
 const { Content } = Layout;
 
@@ -82,6 +83,14 @@ class SearchPage extends Component {
     render() {
         return (
             <Layout>
+                  <div className="sidenav">
+                    <div className="sidenav_content">
+                        <ul>
+                            <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
+                            <li> <Link to="/AllDirectory"> 디렉토리 </Link> </li>
+                        </ul>
+                    </div>
+                </div>
                 <Content className="searchpage">
                     <Row className="body_search">
                     <h1 className="body_title">구독 사이트 검색</h1>   

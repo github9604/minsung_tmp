@@ -3,9 +3,9 @@ import { UserDirectoryList, MatchResultList, GroupList } from '../components/Use
 import { SampleWrite, SampleDirList, SampleGroupDirList } from '../components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Layout, Modal } from 'antd';
+const { Content } = Layout;
 import axios from 'axios';
-import { Modal, Dropdown, Icon, Button } from 'antd';
-import { string } from 'prop-types';
 import { dirPostRequest, dirListRequest, dirRemoveRequest, dirRemove } from '../actions/dirList';
 
 class MyDirectory extends Component {
@@ -112,20 +112,6 @@ class MyDirectory extends Component {
                 }
                 // console.log(tmp);
                 this.setState({ auth_results: tmp, auth_waiting: false });
-            })
-    }
-
-    performDirList = () => {
-        axios.get('/api/dirlist')
-            .then(response => {
-                console.log("dirlist" + response);
-                // console.log("dirlist: " + response.data[0].share_group_id);
-                this.setState({
-                    dirlist_results: response.data
-                });
-            })
-            .catch(error => {
-                console.log('Error fetching and parsing data', error);
             })
     }
 
@@ -247,20 +233,20 @@ class MyDirectory extends Component {
 
     render() {
         return (
-            <div className="d-flex" id="wrapper">
+            <Layout>
                 <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
                             <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
                             <li className="insertDir">
-                                <a  onClick={this.showModal}> DIRECTORY 생성 </a>
+                                <a onClick={this.showModal}> DIRECTORY 생성 </a>
                                 <Modal
                                     title="Directory 생성"
                                     visible={this.state.modal_visible}
                                     onOk={this.handleOk}
                                     onCancel={this.handleCancel}
                                 >
-                                     <SampleWrite onPost={this.handlePost} />
+                                <SampleWrite onPost={this.handlePost} />
                                 </Modal>
                             </li>
                             <SampleDirList group_auth={this.state.auth_results} changeDirAuth={this.changeDirAuth} options={this.state.group_results} data={this.props.dirListData} onRemove={this.handleRemove} />
@@ -268,6 +254,7 @@ class MyDirectory extends Component {
                         </ul>
                     </div>
                 </div>
+                <Content className="searchpage">
                 <div id="page-content-wrapper">
                     <div className="container-fluid">
                         {
@@ -277,7 +264,8 @@ class MyDirectory extends Component {
                         }
                     </div>
                 </div>
-            </div>
+                </Content>
+            </Layout>
         );
     }
 }

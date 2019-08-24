@@ -122,7 +122,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/otherdirlist', function (req, res, next) {
-   let new_query = 'SELECT * FROM kt_intern.tbl_directory INNER JOIN tbl_dir_auth where tbl_directory.dir_id = tbl_dir_auth.dir_id AND NOT(tbl_directory.owner_id = :now_user) AND tbl_dir_auth.dir_auth = :now_auth';
+   let new_query = 'SELECT * FROM heroku_c41d79b16d69b76.tbl_directory INNER JOIN tbl_dir_auth where tbl_directory.dir_id = tbl_dir_auth.dir_id AND NOT(tbl_directory.owner_id = :now_user) AND tbl_dir_auth.dir_auth = :now_auth';
    let values = {
        now_auth: req.session.group_id,
        now_user: req.session.user_id

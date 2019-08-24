@@ -119,13 +119,12 @@ class MyFeed extends Component {
         };
 
         return (
-
             <Layout>
                 <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
                             <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
-                            <li> <Link to="/MyDirectory"> 디렉토리 </Link> </li>
+                            <li> <Link to="/AllDirectory"> 디렉토리 </Link> </li>
                         </ul>
                     </div>
                 </div>
