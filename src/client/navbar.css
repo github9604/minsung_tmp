@@ -703,6 +703,7 @@ mark {
 
 .body_title{
   border-bottom: 1px solid #c5bcbc94;
+  padding-top:4%;
 }
 
 .body_search{
@@ -765,6 +766,14 @@ mark {
 
 .withsidetitle{
   font-size:2rem;
+}
+
+.ant-input-group-wrapper{
+  margin-top:2%;
+}
+
+.body_subtitle{
+  margin-top:2%;
 }
 
 /* ::-webkit-scrollbar {

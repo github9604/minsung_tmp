@@ -3,7 +3,8 @@ import SearchResult from './SearchResult';
 
 const SearchResultList = (props) => {
     return (
-        <div>
+        <div className="body_subtitle">
+              <h3> 검색 결과 </h3>
             {
                 props.results.map((result, i) => {
                     return (

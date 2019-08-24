@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SearchArea, SearchResultList, OtherFeed } from '../components/SearchUrl';
+import { SearchArea, SearchResultList, OtherFeed, NoFeed} from '../components/SearchUrl';
 import axios from 'axios';
 import { Layout, Row } from 'antd';
 const { Content } = Layout;
@@ -14,6 +14,8 @@ class SearchPage extends Component {
             buttonStatus: [],
             user_feeds: [],
             loading_result: '',
+            loading_userfeedlist: true,
+            hasFeed: false,
             hideResult: true
         };
     }
@@ -28,9 +30,9 @@ class SearchPage extends Component {
         .then((response) => {
           if(response.data.success){
               console.log(response.data.data);
-              this.setState({user_feeds: response.data.data});
+              this.setState({user_feeds: response.data.data, hasFeed: true, loading_userfeedlist: false});
           } else{
-              console.log("faile");
+              this.setState({loading_userfeedlist: false, hasFeed:false})
           }
         })
     }
@@ -86,8 +88,10 @@ class SearchPage extends Component {
                     <SearchArea handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
                     <br/>            
                     {
-                        this.state.hideResult ?
-                        <OtherFeed loadUser={this.loadUserFeeds} data={this.state.user_feeds}/>
+                        this.state.hideResult ? (
+                        this.state.loading_userfeedlist ? 
+                        <div className="body_subtitle"> <h3> 구독 중인 사이트 </h3> <h4> 로딩중 </h4> </div>: 
+                        ( this.state.hasFeed ?  <OtherFeed loadUser={this.loadUserFeeds} data={this.state.user_feeds}/> : <NoFeed />))
                             : <SearchResultList btnSet={this.state.buttonStatus} insertFeed={this.insertFeed} results={this.state.results} />
                     } 
                     </Row>

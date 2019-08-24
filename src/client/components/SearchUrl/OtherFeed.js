@@ -5,7 +5,7 @@ const { Meta } = Card;
 class OtherFeed extends Component {
     render() {
         return (
-            <div className="otherfeed">
+            <div className="body_subtitle">
                 <h3> 구독 중인 사이트 </h3>
                 {
                     this.props.data.map((result, i) => {

@@ -73,8 +73,8 @@ class SearchResult extends Component {
                 <br/>
                 {
                     (this.props.btnColor === '1')
-                    ? <Button type="primary" onClick={this.setData}> 이미 구독중 </Button>
-                    : <Button type="default" onClick={this.setData}> Feed 구독 </Button>
+                    ? <Button type="primary" onClick={this.setData}> 구독 완료 </Button>
+                    : <Button type="default" onClick={this.setData}> 구독 </Button>
 
                 }
             </div>
