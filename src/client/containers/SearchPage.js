@@ -14,13 +14,26 @@ class SearchPage extends Component {
             buttonStatus: [],
             user_feeds: [],
             loading_result: '',
-            hideResult: false
+            hideResult: true
         };
     }
 
-    // componentDidMount() {
-    //     this.loadUserFeeds();
-    // }
+    componentDidMount() {
+        this.loadUserFeeds();
+    }
+
+    loadUserFeeds = () => {
+        console.log("searchpage loaduserfeeds");
+        axios.get('/api/showTodayFeed/feedlist')
+        .then((response) => {
+          if(response.data.success){
+              console.log(response.data.data);
+              this.setState({user_feeds: response.data.data});
+          } else{
+              console.log("faile");
+          }
+        })
+    }
 
     insertFeed = (insert_results, btnColor, btnNumber) => {
         // console.log("right..?" + insert_results);
@@ -36,6 +49,7 @@ class SearchPage extends Component {
                 else if (btnColor == "1")
                     this.state.buttonStatus[btnNumber] = "0";
                 this.setState({ buttonStatus: this.state.buttonStatus });
+                this.loadUserFeeds();
                 // console.log(this.state.buttonStatus);
                 // this.setState({ buttonStatus: response.data.has_scrapped });
             })
@@ -63,36 +77,19 @@ class SearchPage extends Component {
         // console.log(value.target.value);
     }
 
-    // componentDidMount() {
-    //     let obj = 'www.naver.com';
-    //     axios.post('/api/urlsearch', { obj })
-    //         .then((response) => {
-    //             this.setState({ results: response.data });
-    //         })
-
-    //     // fetch('/api/urlsearch', obj)
-    //     // .then(res => {
-    //     //     console.log(res);
-    //     //     return res.json()
-    //     // })
-    //     // .then( results => {
-    //     //     console.log( results);
-    //     //     this.setState({  results })
-    //     // });
-    // }
-
     render() {
         return (
             <Layout>
                 <Content className="searchpage">
                     <Row className="body_search">
-                    <h1 className="body_title">구독 사이트 검색</h1>
+                    <h1 className="body_title">구독 사이트 검색</h1>   
                     <SearchArea handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+                    <br/>            
                     {
                         this.state.hideResult ?
-                            <OtherFeed />
+                        <OtherFeed loadUser={this.loadUserFeeds} data={this.state.user_feeds}/>
                             : <SearchResultList btnSet={this.state.buttonStatus} insertFeed={this.insertFeed} results={this.state.results} />
-                    }
+                    } 
                     </Row>
                 </Content>
             </Layout>

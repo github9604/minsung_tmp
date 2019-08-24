@@ -144,7 +144,7 @@ router.post('/', function (req, res, next) {
         limit: 6
     })
         .then(tableFeed => {
-            console.log(tableFeed.length);
+            // console.log(tableFeed.length);
             if(tableFeed.length == 0){
                 return res.json({
                     success: false
@@ -237,13 +237,26 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/feedlist', function (req, res, next) {
+
+    if(typeof req.session.user_id === 'undefined'){
+        return res.status(401).json({
+            error: "THERE IS NO LOGIN DATA",
+            code: 1
+        });
+    }
+
     TableFeed.findAll({
-        where: { feed_reader_id: req.session.user_id },
-        attributes: [
-            `feed_id`
-        ]
+        where: { feed_reader_id: req.session.user_id }
     }).then(tableFeed => {
-        res.json(tableFeed);
+        if(tableFeed.length == 0){
+            return res.json({
+                success: false
+            });
+        } else{
+            return res.json({
+                success: true, data: tableFeed
+            });
+        }
     })
 });
 
