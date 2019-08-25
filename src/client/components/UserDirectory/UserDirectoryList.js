@@ -21,7 +21,7 @@ class UserDirectoryList extends Component {
                 {
                     this.props.data.map((result, i) => {
                         return (
-                            <UserDirEach deleteDirectory={this.props.deleteDirectory} dir_name={result.dir_name} owner_id={result.owner_id} dir_id={result.dir_id}/>
+                            <UserDirEach onRemove={this.props.onRemove} index={i} dir_name={result.dir_name} owner_id={result.owner_id} dir_id={result.dir_id}/>
                         )
                     })
                 }

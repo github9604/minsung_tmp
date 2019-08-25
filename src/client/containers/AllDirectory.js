@@ -148,6 +148,15 @@ class AllDirectory extends Component {
             }
         )
     }
+    
+    handleRemove = (deleteDirInput, index) => {
+        console.log("doiing: " + index);
+        this.props.dirRemoveRequest(deleteDirInput, index).then(() => {
+            console.log("wonder: " + this.props.dirListData);
+            this.props.dirListRequest(true);
+            console.log("user directory page: remove dir");
+        });
+    }
 
     loadNewDir() {
         if (this.props.listStatus === 'WAITING') {
@@ -199,7 +208,7 @@ class AllDirectory extends Component {
                                             >
                                                 <SampleWrite handleChange={this.handleChange} />
                                             </Modal>
-                                        </div><UserDirectoryList data={this.props.dirListData} /> </div>)
+                                        </div><UserDirectoryList data={this.props.dirListData} onRemove={this.handleRemove} /> </div>)
                                         : (this.state.searchMyDir ? <SearchResult data={this.state.searchResult} /> : <h4> 일치하는 디렉토리가 없습니다 </h4>)
                                 }
                             </div>

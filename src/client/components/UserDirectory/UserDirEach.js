@@ -7,6 +7,13 @@ class UserDirEach extends Component {
     handleDelete = () => {
         this.props.deleteDirectory(this.props.dir_name);
     };
+
+    handleRemove = () => {
+        let deleteDirInput = this.props.dir_id;
+        let index = this.props.index;
+        this.props.onRemove(deleteDirInput, index);
+    }
+
     // setDirName = () => {
     //     console.log("selected directory name parsing");
     //     let sendDirName = {
@@ -30,6 +37,7 @@ class UserDirEach extends Component {
                     </div>
                     <h3>{this.props.dir_name}</h3>
                 </Link>
+                <Button color='red' onClick={this.handleRemove}> 삭제 </Button>
             </div>
             // <li>
             //     <a class="nav_a" >

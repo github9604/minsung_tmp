@@ -251,10 +251,10 @@ router.post('/insertDir', (req, res, next) => {
 });
 
 router.delete('/delete', (req, res) => {
-    const dltdirname = req.body.deleteDirInput;
-    console.log(dltdirname);
+    const dltdirid = req.body.deleteDirInput;
+    console.log("dir_id" + dltdirid);
     TableDirectory.findOne({
-        where: { dir_name: req.body.deleteDirInput, owner_id: req.session.user_id }
+        where: { dir_id: dltdirid, owner_id: req.session.user_id }
     })
         .then(tableDirectory => {
             if (!tableDirectory) {
@@ -271,10 +271,16 @@ router.delete('/delete', (req, res) => {
             // .then(result => console.log(result));
 
             TableDirectory.destroy({
-                where: { dir_name: req.body.deleteDirInput }
+                where: { dir_id: dltdirid }
             })
                 .then(response => {
-                    res.json({ success: true });
+                    TableArticle.destroy({
+                        where: {dir_id: dltdirid}
+                    }).then(() => {
+                        TableDirAuth.destroy({
+                            where: {dir_id: dltdirid}
+                        }).then((response) => {return res.json({success: true})})
+                    })
                 })
                 .catch(err => console.log("error" + err));
         })

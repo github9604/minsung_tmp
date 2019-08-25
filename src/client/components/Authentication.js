@@ -99,13 +99,16 @@ class Authentication extends Component {
                         <option selected>소속 부서를 선택해주세요</option>
                         <option name="group_id"
                             className="validate"
-                            value="1">아키텍처TF</option>
+                            value="1">SW아키텍처TF</option>
                         <option name="group_id"
                             className="validate"
-                            value="2">클라우드TF</option>
+                            value="2">GIS플랫폼개발TF</option>
                         <option name="group_id"
                             className="validate"
-                            value="3">GIS TF</option>
+                            value="3">AI IoT개발TF</option>/option>
+                            <option name="group_id"
+                            className="validate"
+                            value="4">Connected Car 플랫폼 TF</option>
                     </select>
                 </div>
             </div>

@@ -49,6 +49,7 @@ class SampleDir extends Component {
         let index = this.props.index;
         this.props.onRemove(deleteDirInput, index);
     }
+    
     render() {
         let arr = JSON.parse("[" + this.props.group_auth + "]");
         // console.log("???: " + this.props.data);
