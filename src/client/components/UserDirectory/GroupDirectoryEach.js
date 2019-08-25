@@ -14,7 +14,7 @@ class GroupDirectoryEach extends Component {
                     }
                 }}>
                     <div className="folder">
-                        <i className="fa fa-cogs"></i>
+                        <i className="fa fa-share-alt"></i>
                     </div>
                     <h3>{this.props.dir_name}</h3>
                 </Link>

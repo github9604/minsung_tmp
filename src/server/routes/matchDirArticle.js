@@ -196,8 +196,8 @@ router.post('/', function(req, res, next) {
         where: {dir_id: req.body.dir_id}
     })
     .then(result => {
-        if(result) res.json({success: true, data: result})
-        else res.json({success: false})
+        if(result.length == 0) return res.json({success:false});
+        else res.json({success: true, data: result});
     })
 });
 

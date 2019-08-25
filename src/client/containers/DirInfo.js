@@ -36,7 +36,7 @@ class DirInfo extends Component {
         let dir_id = this.props.location.state.now_dir_id;
         axios.post('/api/matchDirArticle', { dir_id })
             .then((response) => {
-                console.log(response.data);
+                console.log(response.data.success);
                 if (response.data.success) {
                     this.setState({ match_results: response.data.data, match_result_exist: true, loading_match: false });
                 } else {
@@ -120,18 +120,12 @@ class DirInfo extends Component {
                 <Content>
                     <div className="withsidetitle"> <h1 className="body_title"> {this.props.match.params.dir_name}  </h1> </div>
                     {
-                        this.state.loading_groupList ? <h4 className="body_subtitle"> 권한 로딩중 </h4> : (this.state.loading_auth ? undefined : <DirAuthList showModal={this.showModal} setDefault={this.setDefault} group_auth={this.state.auth_results} options={this.state.group_results}/>)
+                        this.state.loading_groupList ? <h4 className="body_subtitle"> 권한 로딩중 </h4> : (this.state.loading_auth ? <h4 className="body_subtitle"> 권한 로딩중 </h4> : <DirAuthList showModal={this.showModal} setDefault={this.setDefault} group_auth={this.state.auth_results} options={this.state.group_results}/>)
                     }
                     {
-                        this.state.loading_match ?
-                            <h4 className="body_subtitle"> 로딩중 </h4> :
-                            (
-                                this.state.match_result_exist ?
-                                    (
-                                        <MatchResultList match_results={this.state.match_results} />
-                                    ) :  <div className="body_subtitle"> <Card title="디렉토리에 저장된 글이 없습니다">
-                             </Card> </div>
-                            )
+                        this.state.loading_match ? <h4 className="body_subtitle"> 로딩중 </h4> 
+                        : ( this.state.match_result_exist ? <MatchResultList match_results={this.state.match_results}/>:<div className="body_subtitle">
+                            <Card title="해당 디렉토리에 저장된 글이 없습니다"></Card></div>)
                     }
                     <Modal
                         title="해당 디렉토리 권한 변경"

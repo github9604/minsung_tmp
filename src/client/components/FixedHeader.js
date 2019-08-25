@@ -40,7 +40,7 @@ class FixedHeader extends Component {
     return (
       <Layout>
         <header className="header">
-        <Link to="/MainPage" id="header_a">KT Directory</Link>
+        <Link to="/MainPage" className="logo" id="header_a">KT Directory</Link>
           <input className="menu-btn" type="checkbox" id="menu-btn" />
           <label className="menu-icon" htmlFor="menu-btn"><span className="navicon"></span></label>
           <ul className="menu">

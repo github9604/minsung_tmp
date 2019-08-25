@@ -207,9 +207,7 @@ body, html, .root{
   color: black;
 }
 
-#header_a {
-  padding-left: 30px;
-  padding-right: 30px;
+#header_a{
   color: white;
 }
 
@@ -426,6 +424,8 @@ body, html, .root{
           }
           
           .header .logo {
+            color: white;
+            margin-left: 16%;
             display: block;
             float: left;
             font-size: 2em;

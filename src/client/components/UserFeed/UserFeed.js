@@ -43,40 +43,40 @@ class UserFeed extends Component {
   }
 
 
-    openWindow = () => {
-        window.open(this.props.originlink);
-    }
+  openWindow = () => {
+    window.open(this.props.originlink);
+  }
 
-    render() {
-        let dirs = this.props.dirlists;
-        let date = new Date(parseInt(this.props.time, 10));
-        let ds = date.toString('MM/dd/yy HH:mm:ss');
-        return (
-            <VerticalTimelineElement
-                className="vertical-timeline-element--work"
-                date={ds}
-                iconStyle={{ background: '#2b2d42', color: '#2b2d42' }}
-            >
-                <h3 onClick={this.openWindow} className="vertical-timeline-element-title">{this.props.title} </h3>
-                <br />
-                <h4 className="vertical-timeline-element-subtitle">{this.props.author}</h4>
-                <br />
-                <div className="vertical-timeline-element-photo" dangerouslySetInnerHTML={{ __html: this.props.summary }}></div>
-                <br />
-                <div><Popover
-                    content={<div><SelectSearch options={dirs} value={this.state.selectdir ? this.state.selectdir : ''}
-                        onChange={(dir) => this.onChangeValue(dir)} placeholder="폴더를 입력하세요" /> <Button onClick={this.setData}> 폴더에 추가 </Button></div>}
-                    placement="bottom"
-                    trigger="click"
-                    visible={this.state.visible}
-                    onVisibleChange={this.handleVisibleChange}
-                >
-                    <Button type="primary"> 스크랩 </Button>
-                    </Popover>
-                    </div>
-        </VerticalTimelineElement>
-                )
-            }
-        }
-        
+  render() {
+    let dirs = this.props.dirlists;
+    let date = new Date(parseInt(this.props.time, 10));
+    let ds = date.toString('MM/dd/yy HH:mm:ss');
+    return (
+      <VerticalTimelineElement
+        className="vertical-timeline-element--work"
+        date={ds}
+        iconStyle={{ background: '#2b2d42', color: '#2b2d42' }}
+      >
+        <h3 onClick={this.openWindow} className="vertical-timeline-element-title">{this.props.title} </h3>
+        <br />
+        <h4 className="vertical-timeline-element-subtitle">{this.props.author}</h4>
+        <br />
+        <div className="vertical-timeline-element-photo" dangerouslySetInnerHTML={{ __html: this.props.summary }}></div>
+        <br />
+        <div><Popover
+          content={<div><SelectSearch options={dirs} value={this.state.selectdir ? this.state.selectdir : ''}
+            onChange={(dir) => this.onChangeValue(dir)} placeholder="폴더를 입력하세요" /> <Button onClick={this.setData}> 폴더에 추가 </Button></div>}
+          placement="bottom"
+          trigger="click"
+          visible={this.state.visible}
+          onVisibleChange={this.handleVisibleChange}
+        >
+          <Button type="primary"> 스크랩 </Button>
+        </Popover>
+        </div>
+      </VerticalTimelineElement>
+    )
+  }
+}
+
 export default UserFeed;
