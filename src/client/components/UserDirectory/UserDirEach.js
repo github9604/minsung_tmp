@@ -26,7 +26,7 @@ class UserDirEach extends Component {
                     }
                 }}>
                     <div className="folder">
-                        <i className="fa fa-cogs"></i>
+                        <i className="fa fa-user"></i>
                     </div>
                     <h3>{this.props.dir_name}</h3>
                 </Link>
