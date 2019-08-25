@@ -10,12 +10,12 @@ class OtherFeed extends Component {
                 {
                     this.props.data.map((result, i) => {
                         return(
-                        <Card hoverable={true} style={{ marginTop: 16 }} loading={false}>
+                        <Card hoverable={true} onClick={this.openWindow} style={{ marginTop: 16 }} loading={false}>
                             <Meta
                                 avatar={
                                     <img className="right floated mini ui image" src={result.feed_icon} />
                                 }
-                                title={result.feedname}
+                                title={result.feed_name}
                                 description={result.feed_description}
                             />
                         </Card>

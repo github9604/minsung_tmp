@@ -159,7 +159,6 @@ class Authentication extends Component {
 
         return (
             <div>
-                {/* {this.props.mode ? <h2> 로그인 </h2> : <h2> 회원가입 </h2> } */}
                 {this.props.mode ? loginView : registerView}
             </div>
         )

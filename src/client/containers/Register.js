@@ -26,7 +26,7 @@ class Register extends Component {
     }
     render(){
         return (
-            <div>
+            <div className="auth">
                <Authentication mode={false} 
                onRegister = {this.handleRegister}/>
             </div>

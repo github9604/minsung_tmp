@@ -62,6 +62,8 @@ router.post('/', function (req, res, next) {
     let base_url = 'http://cloud.feedly.com/v3/search/feeds?locale=ko&count=40&query=' + wow;
     axios.get(base_url)
         .then((response) => {
+            let length = response.data.results.length;
+            // console.log(response.data.results.length);
             Promise.all(
                 response.data.results.map(
                     async (result,i) => {
@@ -71,7 +73,7 @@ router.post('/', function (req, res, next) {
                             if (check) set_button[i] = '1';
                             else set_button[i] = '0';
                         })
-                        if(i==39) res.json({whole: response.data.results, btn: set_button})
+                        if(i==length-1) res.json({whole: response.data.results, btn: set_button})
                     }
                 )
             )

@@ -52,30 +52,6 @@ const TableFeed = sequelize.define(
     }
 );
 
-const BoardFeed = sequelize.define(
-    'BoardFeed',
-    {
-        post_id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        post_feedid: {
-            type: Sequelize.INTEGER,
-        },
-        user_id: {
-            type: Sequelize.STRING
-        },
-        websiteTitle: {
-            type: Sequelize.STRING
-        }
-    },
-    {
-        timestamps: false,
-        tableName: 'board_feed'
-    }
-);
-
 const TableDirectory = sequelize.define(
     'TableDirectory',
     {
@@ -144,7 +120,6 @@ router.post('/', function (req, res, next) {
         limit: 6
     })
         .then(tableFeed => {
-            // console.log(tableFeed.length);
             if(tableFeed.length == 0){
                 return res.json({
                     success: false

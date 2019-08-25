@@ -14,7 +14,7 @@ class SearchPage extends Component {
             inputArticle: '',
             buttonStatus: [],
             user_feeds: [],
-            loading_result: '',
+            loading_result: false,
             loading_userfeedlist: true,
             hasFeed: false,
             hideResult: true
@@ -61,15 +61,16 @@ class SearchPage extends Component {
     handleSubmit = (e) => {
         // console.log(e);
         // e.preventDefault();
+        this.setState({hideResult: false, loading_result: true})
         let obj = this.state.searchTerm;
         axios.post('/api/urlsearch', { obj })
             .then((response) => {
                 console.log("searchpage handlesubmit");
-                console.log(response);
+                // console.log(response);
                 // console.log("hello: " + response.data.whole);
-                console.log("bye : " + response.data.btn);
-                this.setState({ results: response.data.whole, buttonStatus: response.data.btn, hideResult: false });
-                console.log("yes : " + this.state.buttonStatus);
+                // console.log("bye : " + response.data.btn);
+                this.setState({ results: response.data.whole, buttonStatus: response.data.btn, loading_result:false });
+                // console.log("yes : " + this.state.buttonStatus);
                 // this.loadUserFeeds();
             })
     }
@@ -101,7 +102,7 @@ class SearchPage extends Component {
                                 this.state.loading_userfeedlist ?
                                     <div className="body_subtitle"> <h3> 구독 중인 사이트 </h3> <h4> 로딩중 </h4> </div> :
                                     (this.state.hasFeed ? <OtherFeed loadUser={this.loadUserFeeds} data={this.state.user_feeds} /> : <NoFeed />))
-                                : <SearchResultList btnSet={this.state.buttonStatus} insertFeed={this.insertFeed} results={this.state.results} />
+                                : (this.state.loading_result ? <div className="body_subtitle"> <h3> 검색 중 </h3> <h4> 검색 결과 로딩 중 </h4> </div>  : <SearchResultList btnSet={this.state.buttonStatus} insertFeed={this.insertFeed} results={this.state.results} />)
                         }
                     </Row>
                 </Content>
