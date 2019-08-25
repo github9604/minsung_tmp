@@ -120,7 +120,7 @@ router.get('/', (req, res, next) => {
         })
 })
 
-router.post('/search', function(req, res, next) {
+router.post('/search/dirname', function(req, res, next) {
     let searchdir = req.body.obj;
     console.log(searchdir);
     TableDirectory.findAll({
@@ -132,6 +132,29 @@ router.post('/search', function(req, res, next) {
         }).then(groupdir => res.json({userdir: userdir, groupdir: groupdir}))
     })
 })
+
+router.post('/search/dirowner', function(req, res, next) {
+    let searchdir = req.body.obj;
+    if(searchdir == req.session.user_id){
+        TableDirectory.findAll({
+            where: {owner_id: req.session.user_id}
+        }).then(userdir => res.json({userdir:userdir, groupdir: []}))
+    }else{
+        TableDirectory.findAll({
+            where: {owner_id: searchdir}
+        }).then(groupdir => res.json({userdir: [], groupdir: groupdir}))
+    }
+    // TableDirectory.findAll({
+    //     where: {owner_id: req.session.user_id, owner_id:searchdir}
+    // })
+    // .then(userdir => {
+    //     TableDirectory.findAll({
+    //         where: {owner_id: {[Op.ne]: req.session.user_id}, owner_id: searchdir}
+    //     }).then(groupdir => res.json({userdir: userdir, groupdir: groupdir}))
+    // })
+})
+
+
 router.get('/otherdirlist', function (req, res, next) {
 
    let new_query = 'SELECT * FROM heroku_c41d79b16d69b76.tbl_directory INNER JOIN tbl_dir_auth where tbl_directory.dir_id = tbl_dir_auth.dir_id AND NOT(tbl_directory.owner_id = :now_user) AND tbl_dir_auth.dir_auth = :now_auth';

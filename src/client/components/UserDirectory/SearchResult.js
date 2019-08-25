@@ -7,10 +7,10 @@ class SearchResult extends Component {
             {
                 this.props.data.map((result, i) => {
                     return(
-                        <div class="folderContainer">
+                        <div className="folderContainer">
                         <a href="#">
-                            <div class="folder">
-                                <i class="fa fa-cogs"></i>
+                            <div className="folder">
+                                <i className="fa fa-cogs"></i>
                             </div>
                             <h3>{result.dir_name}</h3>
                         </a>
