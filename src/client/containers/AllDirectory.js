@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Layout, Row, Modal } from 'antd';
+import { Layout, Row, Modal, Icon } from 'antd';
 import { SampleWrite } from '../components';
 import { SearchArea, SearchResult, UserDirectoryList, GroupDirectoryList } from '../components/UserDirectory'
 import { dirPostRequest, dirListRequest, dirRemoveRequest, dirRemove } from '../actions/dirList';
@@ -82,47 +82,47 @@ class AllDirectory extends Component {
 
     handleChangeOpt = (value) => {
         console.log(value);
-        this.setState({ searchDirOpt: value});
+        this.setState({ searchDirOpt: value });
     }
 
     handleSubmit = () => {
         let obj = this.state.searchDirinput;
         let opt = this.state.searchDirOpt;
-        if(opt == 'dir_name'){
+        if (opt == 'dir_name') {
             axios.post('/api/dirlist/search/dirname', { obj })
-            .then((response) => {
-                // console.log(response.data.userdir);
-                // console.log(response.data.groupdir);
-                if (response.data.userdir.length == 0) {
-                    this.setState({ searchMyDir: false });
-                } else {
-                    this.setState({ searchMyDir: true, searchResult: response.data.userdir });
-                }
-                if (response.data.groupdir.length == 0) {
-                    this.setState({ searchGroupDir: false });
-                } else {
-                    this.setState({ searchGroupDir: true, searchGroupDirResult: response.data.groupdir });
-                }
-                this.setState({ hideSearchResult: false })
-            })
+                .then((response) => {
+                    // console.log(response.data.userdir);
+                    // console.log(response.data.groupdir);
+                    if (response.data.userdir.length == 0) {
+                        this.setState({ searchMyDir: false });
+                    } else {
+                        this.setState({ searchMyDir: true, searchResult: response.data.userdir });
+                    }
+                    if (response.data.groupdir.length == 0) {
+                        this.setState({ searchGroupDir: false });
+                    } else {
+                        this.setState({ searchGroupDir: true, searchGroupDirResult: response.data.groupdir });
+                    }
+                    this.setState({ hideSearchResult: false })
+                })
         }
-        else if(opt === 'dir_owner'){
+        else if (opt === 'dir_owner') {
             axios.post('/api/dirlist/search/dirowner', { obj })
-            .then((response) => {
-                if (response.data.userdir.length == 0) {
-                    this.setState({ searchMyDir: false });
-                } else {
-                    this.setState({ searchMyDir: true, searchResult: response.data.userdir });
-                }
-                if (response.data.groupdir.length == 0) {
-                    this.setState({ searchGroupDir: false });
-                } else {
-                    this.setState({ searchGroupDir: true, searchGroupDirResult: response.data.groupdir });
-                }
-                this.setState({ hideSearchResult: false })
-            })
+                .then((response) => {
+                    if (response.data.userdir.length == 0) {
+                        this.setState({ searchMyDir: false });
+                    } else {
+                        this.setState({ searchMyDir: true, searchResult: response.data.userdir });
+                    }
+                    if (response.data.groupdir.length == 0) {
+                        this.setState({ searchGroupDir: false });
+                    } else {
+                        this.setState({ searchGroupDir: true, searchGroupDirResult: response.data.groupdir });
+                    }
+                    this.setState({ hideSearchResult: false })
+                })
         }
-        
+
     }
 
     handlePost = () => {
@@ -168,8 +168,8 @@ class AllDirectory extends Component {
                 <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
-                            <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
-                            <li> <Link to="/AllDirectory"> 디렉토리 </Link> </li>
+                            <li ><Link to="/MyFeed"> <Icon type="container" /> 오늘 피드 </Link></li>
+                            <li> <Link to="/AllDirectory"> <Icon type="folder-open" /> 디렉토리 </Link> </li>
                         </ul>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ class AllDirectory extends Component {
                     <div className="body_search">
                         <Row className="body_search">
                             <h1 className="body_title">디렉토리</h1>
-                            <SearchArea handleSubmit={this.handleSubmit} handleChangeOpt = {this.handleChangeOpt} handleChangeDir={this.handleChangeDir} />
+                            <SearchArea handleSubmit={this.handleSubmit} handleChangeOpt={this.handleChangeOpt} handleChangeDir={this.handleChangeDir} />
                         </Row>
                         <Row className="body_search">
                             <div className="body_subtitle"> <h3> 내 디렉토리 </h3>
@@ -206,16 +206,16 @@ class AllDirectory extends Component {
 
                         </Row>
                         <Row className="body_search">
-                                {
-                                    this.state.hideSearchResult ? 
+                            {
+                                this.state.hideSearchResult ?
                                     (
                                         this.state.loading_groupdir ?
-                                        <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 로딩중 </h4> </div>
-                                        : (this.state.has_groupdir ? <GroupDirectoryList data={this.state.grp_dirlists} /> : <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 공유된 디렉토리가 없습니다 </h4> </div>)
+                                            <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 로딩중 </h4> </div>
+                                            : (this.state.has_groupdir ? <GroupDirectoryList data={this.state.grp_dirlists} /> : <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 공유된 디렉토리가 없습니다 </h4> </div>)
                                     )
-                                    : ( this.state.searchGroupDir ? <div className="body_subtitle"><h3> 공유 디렉토리 </h3> <SearchResult data={this.state.searchGroupDirResult}/>  </div>: <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 일치하는 디렉토리가 없습니다 </h4> </div>)
-                                   
-                                }
+                                    : (this.state.searchGroupDir ? <div className="body_subtitle"><h3> 공유 디렉토리 </h3> <SearchResult data={this.state.searchGroupDirResult} />  </div> : <div className="body_subtitle"> <h3> 공유 디렉토리 </h3> <h4> 일치하는 디렉토리가 없습니다 </h4> </div>)
+
+                            }
                         </Row>
                     </div>
                 </Content>

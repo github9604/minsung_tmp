@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { SearchArea, SearchResultList, OtherFeed, NoFeed} from '../components/SearchUrl';
+import { SearchArea, SearchResultList, OtherFeed, NoFeed } from '../components/SearchUrl';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Layout, Row } from 'antd';
+import { Layout, Row, Icon } from 'antd';
 const { Content } = Layout;
 
 class SearchPage extends Component {
@@ -28,14 +28,14 @@ class SearchPage extends Component {
     loadUserFeeds = () => {
         console.log("searchpage loaduserfeeds");
         axios.get('/api/showTodayFeed/feedlist')
-        .then((response) => {
-          if(response.data.success){
-              console.log(response.data.data);
-              this.setState({user_feeds: response.data.data, hasFeed: true, loading_userfeedlist: false});
-          } else{
-              this.setState({loading_userfeedlist: false, hasFeed:false})
-          }
-        })
+            .then((response) => {
+                if (response.data.success) {
+                    console.log(response.data.data);
+                    this.setState({ user_feeds: response.data.data, hasFeed: true, loading_userfeedlist: false });
+                } else {
+                    this.setState({ loading_userfeedlist: false, hasFeed: false })
+                }
+            })
     }
 
     insertFeed = (insert_results, btnColor, btnNumber) => {
@@ -83,26 +83,26 @@ class SearchPage extends Component {
     render() {
         return (
             <Layout>
-                  <div className="sidenav">
+                <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
-                            <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
-                            <li> <Link to="/AllDirectory"> 디렉토리 </Link> </li>
+                            <li ><Link to="/MyFeed"> <Icon type="container" /> 오늘 피드 </Link></li>
+                            <li> <Link to="/AllDirectory"> <Icon type="folder-open" /> 디렉토리 </Link> </li>
                         </ul>
                     </div>
                 </div>
                 <Content className="searchpage">
                     <Row className="body_search">
-                    <h1 className="body_title">구독 사이트 검색</h1>   
-                    <SearchArea handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
-                    <br/>            
-                    {
-                        this.state.hideResult ? (
-                        this.state.loading_userfeedlist ? 
-                        <div className="body_subtitle"> <h3> 구독 중인 사이트 </h3> <h4> 로딩중 </h4> </div>: 
-                        ( this.state.hasFeed ?  <OtherFeed loadUser={this.loadUserFeeds} data={this.state.user_feeds}/> : <NoFeed />))
-                            : <SearchResultList btnSet={this.state.buttonStatus} insertFeed={this.insertFeed} results={this.state.results} />
-                    } 
+                        <h1 className="body_title">구독 사이트 검색</h1>
+                        <SearchArea handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+                        <br />
+                        {
+                            this.state.hideResult ? (
+                                this.state.loading_userfeedlist ?
+                                    <div className="body_subtitle"> <h3> 구독 중인 사이트 </h3> <h4> 로딩중 </h4> </div> :
+                                    (this.state.hasFeed ? <OtherFeed loadUser={this.loadUserFeeds} data={this.state.user_feeds} /> : <NoFeed />))
+                                : <SearchResultList btnSet={this.state.buttonStatus} insertFeed={this.insertFeed} results={this.state.results} />
+                        }
                     </Row>
                 </Content>
             </Layout>

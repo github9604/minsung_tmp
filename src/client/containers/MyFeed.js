@@ -25,7 +25,7 @@ class MyFeed extends Component {
 
     componentDidMount() {
         this.showTodayFeed(this.state.page);
-        // this.showDirLists();
+        this.showDirLists();
         let options = {
             root: null,
             rootMargin: "0px",
@@ -70,7 +70,7 @@ class MyFeed extends Component {
     showDirLists = () => {
         axios.get('/api/dirlist')
             .then((response) => {
-                // console.log("response data[0]: " + response.data[0].dir_name);
+                console.log(response);
                 for (let i = 0; i < response.data.length; i++) {
                     let tmp = response.data[i].dir_name;
                     let tmplist = this.state.dirlists;
@@ -92,11 +92,7 @@ class MyFeed extends Component {
     }
 
     addtoDirectory = (selectdir) => {
-        // console.log("parsed selectdir data: " + selectdir.dirId);
-        // console.log("origin: " + selectdir.articleId);
         let tmp = selectdir.articleId.split('/');
-        // console.log("changed: " + tmp[0]);
-        // console.log(tmp[1]);
         let dirId = selectdir.dirId;
         let articleId = selectdir.articleId;
         let article_originId = selectdir.article_originId;
@@ -123,8 +119,8 @@ class MyFeed extends Component {
                 <div className="sidenav">
                     <div className="sidenav_content">
                         <ul>
-                            <li ><Link to="/MyFeed"> 오늘의 피드 </Link></li>
-                            <li> <Link to="/AllDirectory"> 디렉토리 </Link> </li>
+                            <li ><Link to="/MyFeed"> <Icon type="container" /> 오늘 피드 </Link></li>
+                            <li> <Link to="/AllDirectory"> <Icon type="folder-open" /> 디렉토리 </Link> </li>
                         </ul>
                     </div>
                 </div>

@@ -13,15 +13,16 @@ body, html{
  }
 
   .sidenav {
-    /* height: 100%; */
-    width: 240px;
-    height: 100%;
+    width: 160px;
+    height: 9%;
     position: fixed;
     z-index: 1;
     left: 0;
-    background-color:#2b2d42;
-    /* background-color: #111; */
+    background-color:rgba(43, 45, 66, 0.0);
     overflow-x: hidden;
+    overflow-y: hidden;
+    margin-top:10%;
+    margin-left:3%;
   }
   
   .sidenav a {
@@ -37,12 +38,14 @@ body, html{
   }
 
   .sidenav_content{
-    margin-top:25.5%;
+    margin-top:1%;
+    margin-bottom:1%;
   }
 
   .sidenav_content li{
-    border-top: 1px solid #f4f4f4;
-    border-bottom: 1px solid #f4f4f4;
+    margin-bottom:1px;
+    background-color:rgba(43, 45, 66);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
   }
   
   .main {
@@ -216,8 +219,8 @@ body, html{
   flex: auto;
   min-height: 0;
   margin-top: 5%;
-  margin-left: 20%;
-  margin-right: 13%
+  margin-left: 16%;
+  margin-right: 16%
 }
 /* 
 @media (min-width: 48em) {
@@ -437,7 +440,7 @@ body, html{
             max-height: 0;
             transition: max-height .2s ease-out;
             background: #2B2D42;
-            margin-right:5%;
+            margin-right:16%;
           }
           
           /* menu icon */
@@ -452,7 +455,7 @@ body, html{
           }
           
           .header .menu-icon .navicon {
-            background: #333;
+            background: white;
             display: block;
             height: 2px;
             position: relative;
@@ -461,7 +464,7 @@ body, html{
           
           .header .menu-icon .navicon:before,
           .header .menu-icon .navicon:after {
-            background: #333;
+            background: white;
             content: '';
             display: block;
             height: 100%;
