@@ -177,7 +177,7 @@ router.post('/grouplist', (req, res, next) => {
     TableGroup.findAll()
         .then(TableGroup => {
             // console.log(JSON.stringify(TableGroup));
-            let results = [{ value: 0, label: req.session.user_id }];
+            let results = [{ value: 0, label: req.body.obj}];
             TableGroup.map((result, i) => {
                 results.push({ value: result.group_id, label: result.group_name });
                 // results.push({ value: result.group_id, text: result.group_name });

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { MatchResultList } from '../components/UserDirectory';
+import { MatchResultList, DirAuthList } from '../components/UserDirectory';
 import axios from 'axios';
-import { Layout, Modal, Checkbox } from 'antd';
+import { Layout, Modal, Checkbox, Card } from 'antd';
 const { Content } = Layout;
 
 class DirInfo extends Component {
@@ -17,21 +17,23 @@ class DirInfo extends Component {
             group_results: [],
             modal_visible: false,
             change_auth: [],
-            confirmLoading:false
+            confirmLoading:false,
+            loading_groupList: true,
+            loading_auth: true
         };
-        this.performGroupList();
+       
     }
 
     componentDidMount() {
-        this.showArticleInDir();
+        this.performGroupList();
         this.setDefault();
+        this.showArticleInDir();
     }
 
     showArticleInDir = () => {
         // console.log("wahta:" + now_dir_name);
         //얘를 기준으로 생각하면 됨! 
         let dir_id = this.props.location.state.now_dir_id;
-
         axios.post('/api/matchDirArticle', { dir_id })
             .then((response) => {
                 console.log(response.data);
@@ -51,8 +53,8 @@ class DirInfo extends Component {
                 for (let i = 0; i < response.data.length; i++) {
                     tmp[i] = response.data[i].dir_auth;
                 }
-                console.log("tmp" + tmp);
-                this.setState({ auth_results: tmp })
+                // console.log("tmp" + tmp);
+                this.setState({ auth_results: tmp, loading_auth:false})
             })
     }
 
@@ -69,12 +71,15 @@ class DirInfo extends Component {
     }
 
     performGroupList = () => {
-        axios.post('/api/dirlist/grouplist')
+        let obj = this.props.location.state.now_dir_owner_id;
+        axios.post('/api/dirlist/grouplist', {obj})
             .then(response => {
                 // console.log(response);
                 // console.log(response.data);
+                console.log(response.data);
                 this.setState({
-                    group_results: response.data
+                    group_results: response.data,
+                    loading_groupList: false
                 });
                 console.log("userdirectory page: group list");
             })
@@ -115,13 +120,17 @@ class DirInfo extends Component {
                 <Content>
                     <div className="withsidetitle"> <h1 className="body_title"> {this.props.match.params.dir_name}  </h1> </div>
                     {
+                        this.state.loading_groupList ? <h4 className="body_subtitle"> 권한 로딩중 </h4> : (this.state.loading_auth ? undefined : <DirAuthList showModal={this.showModal} setDefault={this.setDefault} group_auth={this.state.auth_results} options={this.state.group_results}/>)
+                    }
+                    {
                         this.state.loading_match ?
                             <h4 className="body_subtitle"> 로딩중 </h4> :
                             (
                                 this.state.match_result_exist ?
                                     (
-                                        <MatchResultList showModal={this.showModal} group_auth={this.state.auth_results} options={this.state.group_results} match_results={this.state.match_results} />
-                                    ) : <h4> 글을 추가해주세요 </h4>
+                                        <MatchResultList match_results={this.state.match_results} />
+                                    ) :  <div className="body_subtitle"> <Card title="디렉토리에 저장된 글이 없습니다">
+                             </Card> </div>
                             )
                     }
                     <Modal

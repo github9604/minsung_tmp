@@ -779,6 +779,10 @@ mark {
   margin-top:2%;
 }
 
+#submit_auth:hover{
+  color: black;
+}
+
 /* ::-webkit-scrollbar {
 
   display:none;
