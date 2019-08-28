@@ -65,7 +65,7 @@ class UserFeed extends Component {
         <br />
         <div><Popover
           content={<div><SelectSearch options={dirs} value={this.state.selectdir ? this.state.selectdir : ''}
-            onChange={(dir) => this.onChangeValue(dir)} placeholder="폴더를 입력하세요" /> <Button onClick={this.setData}> 폴더에 추가 </Button></div>}
+            onChange={(dir) => this.onChangeValue(dir)} placeholder="디렉토리를 입력하세요" /> <Button onClick={this.setData}> 디렉토리에 추가 </Button></div>}
           placement="bottom"
           trigger="click"
           visible={this.state.visible}
