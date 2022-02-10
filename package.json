@@ -43,7 +43,7 @@
     "mysql": "^2.16.0",
     "mysql2": "^1.6.5",
     "node-fetch": "^2.6.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "path": "^0.12.7",
     "pbkdf2-password": "^1.2.1",
     "prop-types": "^15.7.2",
